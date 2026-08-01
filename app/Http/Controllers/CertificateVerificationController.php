@@ -126,8 +126,10 @@ class CertificateVerificationController extends Controller
             403,
         );
 
-        $path = $type === 'drawing' ? $certificate->drawing_pdf : $certificate->certificate_pdf;
-
+        $file = $type === 'drawing' ? $certificate->drawing_pdf : $certificate->certificate_pdf;
+        $path = 'permissionPdf/'.$file;
+        
+        // dd($path);
         abort_if(blank($path) || ! Storage::disk('public')->exists($path), 404);
 
         return Storage::disk('public')->download(
