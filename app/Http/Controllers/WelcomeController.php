@@ -23,6 +23,11 @@ class WelcomeController extends Controller
     protected const DEFAULT_RECEIPT_PDF = 'paymentPdf/digigov_1.pdf';
 
     /**
+     * Page the building permission QR code opens when scanned.
+     */
+    protected const VERIFY_CERTIFICATE_URL = 'https://enagar-mahuva.in/verify-certificate';
+
+    /**
      * Display the welcome page.
      */
     public function index(): Response
@@ -121,6 +126,29 @@ class WelcomeController extends Controller
 
         return response()->json([
             'status' => $stored ? 'QR generated' : 'QR Not Generated.',
+            'path' => $stored ? $disk->url($qr_image) : null,
+        ]);
+    }
+
+    /**
+     * Generate the QR code stamped on the building permission PDF. Scanning it
+     * opens the certificate verification page in the browser.
+     */
+    public function permissionQrcode(): JsonResponse
+    {
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::disk('public');
+
+        // Keep the default quiet zone so phone cameras lock on to the code.
+        $png = $this->qrPng(self::VERIFY_CERTIFICATE_URL, 298, 2);
+
+        $qr_image = 'qrcodes/permission_'.time().'.png';
+
+        $stored = $disk->put($qr_image, $png);
+
+        return response()->json([
+            'status' => $stored ? 'QR generated' : 'QR Not Generated.',
+            'url' => self::VERIFY_CERTIFICATE_URL,
             'path' => $stored ? $disk->url($qr_image) : null,
         ]);
     }

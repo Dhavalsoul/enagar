@@ -29,5 +29,6 @@ Route::middleware('auth')->group(function () {
         ->name('payment-receipts.qr');
 });
 Route::get('/getQrCode', [WelcomeController::class, 'getQrCode'])->name('generate.qr');
+Route::get('/permissionQrcode', [WelcomeController::class, 'permissionQrcode'])->name('generate.permission.qr');
 
 require __DIR__.'/auth.php';
