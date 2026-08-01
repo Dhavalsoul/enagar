@@ -14,6 +14,8 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                // Public eNagar portal pages
+                enagar: ['Roboto', 'Arial', ...defaultTheme.fontFamily.sans],
             },
         },
     },
